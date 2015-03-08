@@ -1,4 +1,5 @@
-# Copy dependencies into the install directory in Linux for quick and dirty distribution.
+# Copy dependencies into the install directory in Linux for quick and dirty
+# distribution.
 #
 # This assumes a standard distribution, i.e.
 #   install(TARGETS ...
@@ -22,6 +23,17 @@
 #
 # Now when you run `make install', it will call this script afterwards and
 # copy dependencies, just like is done with CMake-OSX's FixupBundle.
+#
+# Issues
+# -----
+# Determining system libraries is not foolproof so we make our own list. Look 
+# for the known_system_libraries and add your own to the list.
+#
+# While this script does the job of copying libraries, you need to also set the
+# RPATH on the copies yourself. Check out the awesome `patchelf' utility for
+# this purpose at
+#
+#   git@github.com:NixOS/patchelf.git
 
 message(STATUS "FOOBAR")
 include(GetPrerequisites)
@@ -64,6 +76,8 @@ function(get_project_keys exes_var keys_var)
         set(known_system_libraries ${known_system_libraries} "libgcc_s.so")
         set(known_system_libraries ${known_system_libraries} "libm.so")
         set(known_system_libraries ${known_system_libraries} "libstdc++.so")
+        set(known_system_libraries ${known_system_libraries} "libGL.so")
+        set(known_system_libraries ${known_system_libraries} "libnvidia")
         get_prerequisites("${fullexepath}" prereqs ${do_not_exclude_system_libraries} ${recursive_mode_on} "${exepath}" "")
         foreach(pr ${prereqs})
             get_filename_component(item_name "${pr}" NAME)
@@ -187,6 +201,6 @@ set(PROJECT_DIR "${CURRENT_LIST_DIR}/..")
 # Wow this is null
 #message(STATUS ${PROJECT_SOURCE_DIR})
 include("${PROJECT_DIR}/.build_targets")
-get_project_keys(my_targets BUILD_TARGETS)
+get_project_keys(BUILD_TARGETS keys)
 copy_project_keys(keys)
 clear_project_keys(keys)
