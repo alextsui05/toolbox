@@ -521,6 +521,17 @@ noscript {display:none;} /* Fixes a feature in Firefox 1.5.0.2 where print previ
 </div>
 <!--POST-SHADOWAREA-->
 <div id="storeArea">
+<div title="2015-3-7" creator="atsui" modifier="atsui" created="201503080323" modified="201503080323" tags="journal" changecount="2">
+<pre>I wrote a hackish CMake script [[PostInstall.cmake|https://github.com/alextsui05/toolbox/blob/master/cmake/PostInstall.cmake]] that copies C++ library dependencies into the installation directory. The idea is to be able to do what {{{BundleUtilites.cmake}}} does for OSX bundles on Linux.
+
+Right now, it does it's job, but it is missing the fixup step of setting the rpath of the copied shared libraries. I know that CMake can be made to do this for shared libraries that are build targets in the project, but I don't know how to manually use CMake to modify the rpath. For now, I am using the {{{patchelf}}} utility ([[available on Github|https://github.com/NixOS/patchelf]]) to set the rpath myself and have noted this fact in the comment:
+
+{{{
+for i in ${INSTALL_DIR}/lib/*; do
+    patchelf --set-rpath \$ORIGIN/../lib ${i}
+done
+}}}</pre>
+</div>
 <div title="CalendarPlugin" modifier="AlexTsui" created="200807230358" modified="200901262203" tags="systemConfig systemTiddlers">
 <pre>/***
 |Name|CalendarPlugin|
@@ -1122,8 +1133,9 @@ config.macros.checkbox = {
 }
 //}}}</pre>
 </div>
-<div title="DefaultTiddlers" modifier="atsui" created="200807250312" modified="201503072325" changecount="2">
-<pre>Overview</pre>
+<div title="DefaultTiddlers" modifier="atsui" created="200807250312" modified="201503080315" changecount="3">
+<pre>Overview
+2015-3-7</pre>
 </div>
 <div title="Examples" creator="atsui" modifier="atsui" created="201502150251" modified="201502150255" changecount="12">
 <pre>!!Quickstart
@@ -1900,11 +1912,12 @@ tweaked &quot;eat newlines&quot; logic for line-mode {{{+++}}} and {{{===}}} syn
 2005.11.03 1.0.0 initial public release
 &lt;&lt;&lt;</pre>
 </div>
-<div title="Overview" creator="atsui" modifier="atsui" created="201503072328" modified="201503072328" changecount="2">
+<div title="Overview" creator="atsui" modifier="atsui" created="201503072328" modified="201503080315" changecount="3">
 <pre>The project is organized roughly like so:
 * {{{bin/}}} - helpful scripts that you can put on your path and use
 * {{{cmake/}}} - some CMake scripts for various purposes
 * {{{templates/}}} - template files for various purposes
+* {{{blender/}}} - Blender scripts
 * {{{./}}} - unsorted files and everything else just sit in the root until they pile up enough to be sorted further</pre>
 </div>
 <div title="SideBarOptions" modifier="atsui" created="201304061914" modified="201304061915">
